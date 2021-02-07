@@ -44,7 +44,9 @@
 				A7B35A7E25B86589006C1256 /* qz */,
 				A7B35A7D25B86589006C1256 /* Products */,
 			);
+			indentWidth = 3;
 			sourceTree = "<group>";
+			tabWidth = 3;
 		};
 		A7B35A7D25B86589006C1256 /* Products */ = {
 			isa = PBXGroup;
@@ -88,7 +90,7 @@
 		A7B35A7425B86589006C1256 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1230;
+				LastUpgradeCheck = 1240;
 				TargetAttributes = {
 					A7B35A7B25B86589006C1256 = {
 						CreatedOnToolsVersion = 12.3;
@@ -239,6 +241,7 @@
 		A7B35A8425B86589006C1256 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -247,6 +250,7 @@
 		A7B35A8525B86589006C1256 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

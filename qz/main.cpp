@@ -170,23 +170,23 @@ namespace Qweez {
          std::istream &in;
          std::ostream &out;
          std::ostream &err;
-      } user;
+      } userIO;
       STRING fName;
       const auto empty() { return redo.empty() && todo.empty(); }
       const auto human( const TAG &tag ) {
          Body body{ items.at( tag ) };
-         user.out << body << '\n';  // body text (the item's question text)
+         userIO.out << body << '\n';  // body text (the item's question text)
          ++scrambler;               // advance to next random sequence
          char c{ 'A' };
          // present body according in scramble order
          for( auto n{ 0 }; n < CARDINAL; ++n ) {
-            user.out << c++ << ". " << scrambler(body, n) << '\n';
+            userIO.out << c++ << ". " << scrambler(body, n) << '\n';
          }
          TEXT text;
          bool proceed{ false };
          while( !proceed ) {
-            user.in >> text;
-            if( user.in.eof() ) { return false; }  // EOT from human
+            userIO.in >> text;
+            if( userIO.in.eof() ) { return false; }  // EOT from human
             auto cmd{ std::toupper( *text.begin()) };
             if( 'Q' == cmd ) { return  false ;}
             auto n{ static_cast<N>( cmd - 'A' ) };
@@ -194,12 +194,12 @@ namespace Qweez {
                text.clear();
                text = scrambler(body, n);
                proceed = true;
-            } catch ( ... ) { user.err << "\r?\r"; continue; }
+            } catch ( ... ) { userIO.err << "\r?\r"; continue; }
             if( body( text ) ) { ++(rating.at( tag )); } // dinger: big wiener.
             else {
                --(rating.at( tag ));               // buzzer: wrongo, bucko.
                redo.push( tag );                   // queue for later
-               user.out << '\n' << body() << '\n'; // instant re-inforcement
+               userIO.out << '\n' << body() << '\n'; // instant re-inforcement
             }
          }
          return true;
@@ -208,7 +208,7 @@ namespace Qweez {
       explicit Quiz( int c, CCP a[], CCP e[] )
       : syms{ c, a, e }, items{ syms.at( "$1" ) }, score{}, todo{}, redo{},
       rating{}, engine{}, scrambler{ CARDINAL },
-      user{ std::cin, std::cout, std::cerr }, fName{} {
+      userIO{ std::cin, std::cout, std::cerr }, fName{} {
          try { fName = syms.at( "$2" ); }
          catch ( ... ) { fName = syms.at( "HOME" ) + configFileDefault; }
          std::ifstream is{ fName };
@@ -247,8 +247,8 @@ namespace Qweez {
                tag = todo.back();
                todo.pop_back();
             }
-            user.out << '\n' << tag << ' ' << todo.size() << ' ';
-            user.out << score;
+            userIO.out << '\n' << tag << ' ' << todo.size() << ' ';
+            userIO.out << score;
             if( !human( tag ) ) break;    // EOT sent
             if( rating.at( tag ) < 0 ) {
                --score;

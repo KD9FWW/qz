@@ -62,8 +62,11 @@ namespace Qweez {
          return arg.at( this->at(iNdex).at(n) );
       }
       auto operator++() {
-         if( iNdex >= this->size() ) { shfl(); iNdex = 0; }
-         else ++iNdex;
+         ++iNdex;
+         if( this->size() <= iNdex ) {
+            shfl();
+            iNdex = 0;
+         }
       }
       explicit Seq( const N &cardinal = CARDINAL, bool seed = true )
       : autoSeed{ seed }, canon{} {
@@ -175,8 +178,7 @@ namespace Qweez {
       const auto empty() { return redo.empty() && todo.empty(); }
       const auto human( const TAG &tag ) {
          Body body{ items.at( tag ) };
-         userIO.out << body << '\n';  // body text (the item's question text)
-         ++scrambler;               // advance to next random sequence
+         userIO.out << body << '\n';   // body text (the item's question text)
          char c{ 'A' };
          // present body according in scramble order
          for( auto n{ 0 }; n < CARDINAL; ++n ) {
@@ -201,6 +203,13 @@ namespace Qweez {
                redo.push( tag );                   // queue for later
                userIO.out << '\n' << body() << '\n'; // instant re-inforcement
             }
+// rwh 2021Feb14
+            ++scrambler;               // advance to next random sequence
+// effect a post increment.
+// if more operator()s are needed in the future,
+// like post incr, so that: scrambler(body,n)++ works
+// implement the class using iterators
+// end 2021Feb14
          }
          return true;
       }
